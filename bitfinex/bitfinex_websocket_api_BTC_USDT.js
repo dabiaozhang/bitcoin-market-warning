@@ -67,9 +67,9 @@ socket.on('message', (msg) => {
 
 function getMailSubject(type,params) {
     if(type == 'down') {
-        return "bitfinex比特币已经接近" + params.bidNextRange
+        return "bitfinex_bitcoin已经接近" + params.bidNextRange
     } else {
-        return "bitfinex比特币已经接近" + params.bidNowRange
+        return "bitfinex_bitcoin已经接近" + params.bidNowRange
     }
 }
 
@@ -77,11 +77,11 @@ function getMailSubject(type,params) {
 function sendMail(params) {
     mail.mailOptions.subject = params.subject
     mail.mailOptions.html = 
-    "<b>当前最高买价：" + params.bid + 
-    "<br>最高买价数量:" + params.bidSize + 
-    "<br>当前最低卖价:" + params.ask + 
-    "<br>最低卖价数量:" + params.askSize + 
-    "<br>今日成交量：" + params.dailyVolumn + 
+    "<b>当前max价：" + params.bid + 
+    "<br>max数量:" + params.bidSize + 
+    "<br>min卖价:" + params.ask + 
+    "<br>min数量:" + params.askSize + 
+    "<br>today成交总量：" + params.dailyVolumn + 
     "</b>"
     mail.transporter.sendMail(mail.mailOptions, (error, info) => {
         if (error) {

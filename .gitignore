@@ -1,5 +1,2 @@
-node_modules 
-dist
-.tmp
-bower_components
-test　
+﻿node_modules
+util/mail_config.js

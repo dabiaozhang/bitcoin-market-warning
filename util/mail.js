@@ -1,11 +1,9 @@
 const nodemailer = require('nodemailer')
-
+const account = require('../util/mail_config.js')
 var mail = {};
 
-let account = {user:"zhangchun6789@163.com",pass:"Zhangchun900401"}
-
 mail.transporter = nodemailer.createTransport({
-    host: 'smtp.163.com',
+    host: 'smtp.qq.com',
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
@@ -15,7 +13,7 @@ mail.transporter = nodemailer.createTransport({
 });
 
 mail.mailOptions = {
-    from: 'zhangchun6789@163.com', // sender address
+    from: '1342585809@qq.com', // sender address
     to: '549783842@qq.com', // list of receivers
     subject: 'bitcoin', // Subject line
     text: 'bitcoin', // plain text body
