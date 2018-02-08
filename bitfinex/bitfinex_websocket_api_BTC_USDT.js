@@ -3,18 +3,16 @@ const ws = require('ws')
 const fs = require('fs')
 const socket = new ws('wss://api.bitfinex.com/ws/2')
 
+const intervalRange = 50
+const intervalTime = 10
+const alertAmount = 200
+
 let msg = JSON.stringify({ 
    event: "subscribe",
    channel: "ticker",
    symbol: "tBTCUSD"
 
 })
-let intervalRange = 50
-
-//let data = fs.readFileSync("./log/bidData.log",'utf8');
-
-// fs.writeFileSync("./log/bidData.log","12312312")
-// return
 
 socket.on('open', () => socket.send(msg))
 
@@ -40,12 +38,13 @@ socket.on('message', (msg) => {
         } else {
             type = "up"
         }
-        if(data && data != '') {
+        //交易量大于200时报警
+        if(data && data != '' && (params.bidSize > alertAmount || params.askSize > alertAmount)) {
             data = JSON.parse(data)
             let nowTime = Math.round(new Date().getTime()/1000)
             console.log(data[params.bidNowRange])
             if(data[params.bidNowRange] != undefined) {
-                if(type == data[params.bidNowRange]['type'] && nowTime-data[params.bidNowRange]['time'] > 20*60) {
+                if(type == data[params.bidNowRange]['type'] && nowTime-data[params.bidNowRange]['time'] > intervalTime*60) {
                     data[params.bidNowRange] = {type: type, time: nowTime}
                     data = JSON.stringify(data)
                     fs.writeFileSync("./log/bidData.log",data)
@@ -66,10 +65,13 @@ socket.on('message', (msg) => {
 
 
 function getMailSubject(type,params) {
+    let str = ""
+    if(params.askSize > alertAmount) str = "空头来袭,准备卖出"
+    if(params.bidSize > alertAmount) str = "多头来袭,准备买入"
     if(type == 'down') {
-        return "bitfinex_bitcoin已经接近" + params.bidNextRange
+        return str + params.bidNextRange
     } else {
-        return "bitfinex_bitcoin已经接近" + params.bidNowRange
+        return str + params.bidNowRange
     }
 }
 
@@ -77,11 +79,11 @@ function getMailSubject(type,params) {
 function sendMail(params) {
     mail.mailOptions.subject = params.subject
     mail.mailOptions.html = 
-    "<b>当前max价：" + params.bid + 
-    "<br>max数量:" + params.bidSize + 
-    "<br>min卖价:" + params.ask + 
-    "<br>min数量:" + params.askSize + 
-    "<br>today成交总量：" + params.dailyVolumn + 
+    "<b>当前最高买价：" + params.bid + 
+    "<br>最高买价数量:" + params.bidSize + 
+    "<br>最低卖价:" + params.ask + 
+    "<br>最低卖价数量:" + params.askSize + 
+    "<br>今日成交总量：" + params.dailyVolumn + 
     "</b>"
     mail.transporter.sendMail(mail.mailOptions, (error, info) => {
         if (error) {
