@@ -3,24 +3,20 @@ const ws = require('ws')
 const fs = require('fs')
 const socket = new ws('wss://api.bitfinex.com/ws/2')
 
-const intervalRange = 50
+const intervalRange = 10
 const intervalTime = 10
-const alertAmount = 200
-// const intervalTime = 1
-// const alertAmount = 2
-
+const alertAmount = 600
 
 let msg = JSON.stringify({ 
    event: "subscribe",
    channel: "ticker",
-   symbol: "tBTCUSD"
+   symbol: "tBCHUSD"
 
 })
 
 socket.on('open', () => socket.send(msg))
 
 socket.on('close', () => socket.send(msg))
-
 
 socket.on('message', (msg) => {
     console.log(msg)
@@ -72,8 +68,8 @@ socket.on('message', (msg) => {
 
 function getMailSubject(type,params) {
     let str = ""
-    if(params.askSize > alertAmount) str = "btc空头来袭,准备卖出"
-    if(params.bidSize > alertAmount) str = "btc多头来袭,准备买入"
+    if(params.askSize > alertAmount) str = "BCH空头来袭,准备卖出"
+    if(params.bidSize > alertAmount) str = "BCH多头来袭,准备买入"
     if(type == 'down') {
         return str + params.bidNextRange
     } else {

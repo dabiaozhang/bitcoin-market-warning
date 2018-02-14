@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "bitfinexBtc": "forever start -c nodemon ./bitfinex/bitfinex_websocket_api_BTC_USDT.js > ./log",
+    "bitfinexBch": "forever start -c nodemon ./bitfinex/bitfinex_websocket_api_BCH_USDT.js > ./log",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

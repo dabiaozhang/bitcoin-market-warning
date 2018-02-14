@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const account = require('../util/mail_config.js')
+const account = require('./mail_config.js')
 var mail = {};
 
 mail.transporter = nodemailer.createTransport({
@@ -14,7 +14,8 @@ mail.transporter = nodemailer.createTransport({
 
 mail.mailOptions = {
     from: '1342585809@qq.com', // sender address
-    to: '549783842@qq.com', // list of receivers
+    to: '549783842@qq.com,chaoran7@126.com,435153071@qq.com,yuejer@163.com,zwkwd2008@163.com', // list of receivers
+    //to: '549783842@qq.com', // list of receivers
     subject: 'bitcoin', // Subject line
     text: 'bitcoin', // plain text body
     html: '<b>bitcoin</b>' // html body
